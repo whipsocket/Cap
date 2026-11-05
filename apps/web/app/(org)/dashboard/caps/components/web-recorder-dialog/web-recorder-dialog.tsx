@@ -201,6 +201,8 @@ export const WebRecorderDialog = ({
 		},
 		onRecordingStart: handleRecordingStartSound,
 		onRecordingStop: handleRecordingStopSound,
+		// From the portal the video goes back to the ticket; no share page tab.
+		openShareOnComplete: !portalMode,
 	});
 
 	// Whipsocket fork: hand the finished recording back to the portal, once.
@@ -211,9 +213,16 @@ export const WebRecorderDialog = ({
 		if (handedToPortal.current === videoId) return;
 		handedToPortal.current = videoId;
 		if (notifyPortalRecording({ videoId, shareUrl: completedShareUrl })) {
-			toast.success("Added to your ticket. This window will close.");
-			window.setTimeout(() => window.close(), 2000);
+			toast.success("✓ Added to your ticket. Closing…");
+			window.setTimeout(() => window.close(), 1500);
+			return;
 		}
+		// The ticket window was closed meanwhile: give them the link to paste.
+		void navigator.clipboard?.writeText(completedShareUrl).catch(() => {});
+		toast.info(
+			`Saved. Your ticket window was closed, so paste this link into the ticket (it's copied): ${completedShareUrl}`,
+			{ duration: 60_000 },
+		);
 	}, [portalMode, phase, videoId, completedShareUrl]);
 
 	useEffect(() => {

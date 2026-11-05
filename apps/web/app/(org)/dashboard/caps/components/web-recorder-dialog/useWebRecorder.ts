@@ -70,6 +70,8 @@ interface UseWebRecorderOptions {
 	onRecordingSurfaceDetected?: (mode: RecordingMode) => void;
 	onRecordingStart?: () => void;
 	onRecordingStop?: () => void;
+	/** Whipsocket fork: open the share page when the upload finishes (off in portal mode). */
+	openShareOnComplete?: boolean;
 }
 
 const INSTANT_UPLOAD_REQUEST_INTERVAL_MS = 1000;
@@ -133,6 +135,7 @@ export const useWebRecorder = ({
 	onRecordingSurfaceDetected,
 	onRecordingStart,
 	onRecordingStop,
+	openShareOnComplete = true,
 }: UseWebRecorderOptions) => {
 	const [phase, setPhase] = useState<RecorderPhase>("idle");
 	const phaseRef = useRef<RecorderPhase>("idle");
@@ -1289,8 +1292,10 @@ export const useWebRecorder = ({
 			replaceErrorDownload(null);
 			setUploadStatus(undefined);
 			updatePhase("completed");
-			toast.success("Recording uploaded. Your share link is ready.");
-			openShareUrl(creation.shareUrl);
+			if (openShareOnComplete) {
+				toast.success("Recording uploaded. Your share link is ready.");
+				openShareUrl(creation.shareUrl);
+			}
 			router.refresh();
 		} catch (error) {
 			if (generation !== setupGenerationRef.current) return;
@@ -1317,6 +1322,7 @@ export const useWebRecorder = ({
 		}
 	}, [
 		disposeRecordingSpool,
+		openShareOnComplete,
 		openShareUrl,
 		replaceErrorDownload,
 		resetRecorder,
