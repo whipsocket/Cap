@@ -30,6 +30,7 @@ import {
 	normalizeSignInEmail,
 } from "./domain-utils.ts";
 import { DrizzleAdapter } from "./drizzle-adapter.ts";
+import { signInWithPortalToken } from "./portal-sso.ts";
 import {
 	provisionSsoMembership,
 	type SsoAuthContext,
@@ -295,6 +296,19 @@ export const authOptions = (ssoContext?: SsoAuthContext): NextAuthOptions => {
 										name: user.name,
 										image: user.image,
 									};
+								},
+							}),
+						]
+					: []),
+				// Whipsocket fork: sign-in from the portal with a signed, single-use token.
+				...(serverEnv().PORTAL_SSO_SECRET?.trim()
+					? [
+							CredentialsProvider({
+								id: "portal",
+								name: "Whipsocket Portal",
+								credentials: { token: { label: "Token", type: "text" } },
+								async authorize(credentials) {
+									return signInWithPortalToken(credentials?.token);
 								},
 							}),
 						]

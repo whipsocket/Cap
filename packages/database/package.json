@@ -62,6 +62,8 @@
 		"./auth/domain-utils": "./auth/domain-utils.ts",
 		"./auth/request-site": "./auth/request-site.ts",
 		"./auth/session": "./auth/session.ts",
+		"./auth/portal-token": "./auth/portal-token.ts",
+		"./auth/portal-sso": "./auth/portal-sso.ts",
 		"./auth/sso": "./auth/sso.ts",
 		"./auth/sso-state": "./auth/sso-state.ts",
 		"./schema": "./schema.ts",

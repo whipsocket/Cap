@@ -109,6 +109,20 @@ function createServerEnv() {
 					"Required to enable trusted-proxy auth: a non-blank shared secret the proxy must send as 'x-trusted-proxy-secret'. Unset or blank disables the provider. Keep this server-side, never in browser code.",
 				),
 
+			/// Whipsocket portal sign-in (fork addition)
+			PORTAL_SSO_SECRET: z
+				.string()
+				.optional()
+				.describe(
+					"Shared secret the Whipsocket portal signs sign-in tokens with (/login/portal). Unset or blank disables portal sign-in.",
+				),
+			PORTAL_STAFF_ORG_ID: z
+				.string()
+				.optional()
+				.describe(
+					"Organization that portal staff join on sign-in (the agency's organization).",
+				),
+
 			/// Settings
 			CAP_VIDEOS_DEFAULT_PUBLIC: boolString(true).describe(
 				"Should videos be public or private by default",
