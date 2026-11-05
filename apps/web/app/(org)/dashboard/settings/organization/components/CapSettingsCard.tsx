@@ -18,6 +18,7 @@ import { updateOrganizationSettings } from "@/actions/organization/settings";
 import { DEFAULT_PLAYBACK_SPEED, PLAYBACK_SPEEDS } from "@/lib/playback-speed";
 import { useDashboardContext } from "../../../Contexts";
 import type { OrganizationSettings } from "../../../dashboard-data";
+import { showProLabels } from "@/lib/pro-labels";
 
 const defaultSettings: OrganizationSettings = {
 	disableComments: false,
@@ -288,7 +289,7 @@ const OrganizationCapSettings = ({
 						>
 							<div className="flex gap-1.5 items-center">
 								<p className="text-sm text-gray-12">{option.label}</p>
-								{option.pro && (
+								{option.pro && showProLabels() && (
 									<p className="py-1 px-1.5 text-[10px] leading-none font-medium rounded-full text-white bg-blue-11">
 										Pro
 									</p>
@@ -347,9 +348,11 @@ const OrganizationCapSettings = ({
 				<div className="flex flex-col flex-1 gap-1">
 					<div className="flex gap-1.5 items-center">
 						<p className="text-sm text-gray-12">AI generation language</p>
-						<p className="py-1 px-1.5 text-[10px] leading-none font-medium rounded-full text-white bg-blue-11">
-							Pro
-						</p>
+						{showProLabels() && (
+							<p className="py-1 px-1.5 text-[10px] leading-none font-medium rounded-full text-white bg-blue-11">
+								Pro
+							</p>
+						)}
 					</div>
 					<p className="text-xs text-gray-10">
 						Set the language used for transcripts, titles, summaries, and

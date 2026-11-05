@@ -24,7 +24,8 @@ export const OrganizationDetailsCard = () => {
 			</CardHeader>
 			<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
 				<OrgName />
-				<CustomDomain />
+				{/* Whipsocket fork: custom domains need Cap's cloud hosting (Vercel). */}
+				{process.env.NEXT_PUBLIC_IS_CAP === "true" && <CustomDomain />}
 				<OrganizationIcon />
 				<ShareableLinkIcon />
 				<AccessEmailDomain />

@@ -19,6 +19,7 @@ import type { CurrentUser } from "@/app/Layout/AuthContext";
 import { DEFAULT_PLAYBACK_SPEED, PLAYBACK_SPEEDS } from "@/lib/playback-speed";
 import { useDashboardContext } from "../../Contexts";
 import type { OrganizationSettings } from "../../dashboard-data";
+import { showProLabels } from "@/lib/pro-labels";
 
 interface SettingsDialogProps {
 	isOpen: boolean;
@@ -209,7 +210,7 @@ export const SettingsDialog = ({
 								>
 									<div className="flex gap-1.5 items-center flex-wrap">
 										<p className="text-sm text-gray-12">{option.label}</p>
-										{option.pro && (
+										{option.pro && showProLabels() && (
 											<p className="py-1 px-1.5 text-[10px] leading-none font-medium rounded-full text-white bg-blue-11">
 												Pro
 											</p>

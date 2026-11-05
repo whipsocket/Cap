@@ -53,7 +53,8 @@ export default function Stepper({
 			name: "Download",
 			completed: completedSteps.download || false,
 		},
-	];
+		// Whipsocket fork: self-hosted setup is just the first two steps.
+	].slice(0, process.env.NEXT_PUBLIC_IS_CAP === "true" ? 5 : 2);
 
 	return (
 		<>

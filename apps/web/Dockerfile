@@ -12,6 +12,8 @@ COPY . .
 RUN --mount=type=cache,id=bun-1.4.4,target=/root/.bun/install/cache bun install --frozen-lockfile
 
 ARG NEXT_PUBLIC_DOCKER_BUILD=true
+# Whipsocket fork: --build-arg NEXT_PUBLIC_INSTANCE_LOGO=1 shows our logo and icons.
+ARG NEXT_PUBLIC_INSTANCE_LOGO=
 ENV NEXT_PUBLIC_WEB_URL=http://localhost:3000
 
 RUN bun run build:web

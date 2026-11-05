@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fit, Layout, useRive } from "@/lib/rive";
 import { useDashboardContext, useTheme } from "../../Contexts";
+import { showProLabels } from "@/lib/pro-labels";
 
 const CapAIDialog = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 	const { theme } = useTheme();
@@ -35,9 +36,11 @@ const CapAIDialog = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 			<DialogHeader icon={<FontAwesomeIcon icon={faInfoCircle} />}>
 				<DialogTitle className="flex gap-2 items-center text-lg font-medium text-gray-12">
 					Cap AI
-					<span className="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white">
-						Pro
-					</span>
+					{showProLabels() && (
+						<span className="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white">
+							Pro
+						</span>
+					)}
 				</DialogTitle>
 			</DialogHeader>
 			<div className="p-8">

@@ -35,6 +35,14 @@ export default async function OnboardingStepLayout({
 						? Boolean(steps.inviteTeam)
 						: Boolean(steps.download);
 
+	// Whipsocket fork: self-hosted setup ends after the organization step.
+	if (
+		process.env.NEXT_PUBLIC_IS_CAP !== "true" &&
+		ordered.every((s) => isComplete(s))
+	) {
+		redirect("/dashboard");
+	}
+
 	const firstIncomplete = ordered.find((s) => !isComplete(s)) ?? "download";
 
 	if (currentStep !== firstIncomplete) {

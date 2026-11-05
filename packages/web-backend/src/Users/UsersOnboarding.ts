@@ -147,6 +147,13 @@ export class UsersOnboarding extends Effect.Service<UsersOnboarding>()(
 											onboardingSteps: {
 												...user.onboardingSteps,
 												organizationSetup: true,
+												// Whipsocket fork: self-hosted has no custom-domain,
+												// paid-seat or download steps; setup ends here.
+												...(process.env.NEXT_PUBLIC_IS_CAP !== "true" && {
+													customDomain: true,
+													inviteTeam: true,
+													download: true,
+												}),
 											},
 										})
 										.where(Dz.eq(Db.users.id, currentUser.id));

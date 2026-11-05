@@ -19,6 +19,27 @@ export const Logo = ({
 }) => {
 	const ids = useGlassLogoIds();
 
+	// Whipsocket fork: our instance shows its own logo (built with
+	// NEXT_PUBLIC_INSTANCE_LOGO=1; files in apps/web/public/instance).
+	if (process.env.NEXT_PUBLIC_INSTANCE_LOGO === "1") {
+		const src = hideLogoName
+			? "/instance/logo-icon.png"
+			: white
+				? "/instance/logo-light.svg"
+				: "/instance/logo-dark.svg";
+		return (
+			<div className="flex items-center">
+				{/* biome-ignore lint/performance/noImgElement: static brand asset */}
+				<img
+					src={src}
+					alt="Whipsocket"
+					className={`object-contain object-left ${className ?? ""}`}
+					style={style}
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<div className="flex items-center">
 			<svg

@@ -42,9 +42,15 @@ const defaultFont = localFont({
 	preload: false,
 });
 
+// Whipsocket fork: our instance's name and icons (built with NEXT_PUBLIC_INSTANCE_LOGO=1).
+const INSTANCE = process.env.NEXT_PUBLIC_INSTANCE_LOGO === "1";
+const ICONS = INSTANCE ? "/instance" : "";
+
 export const metadata: Metadata = {
 	metadataBase: new URL("https://cap.so"),
-	title: "Cap — Beautiful screen recordings, owned by you.",
+	title: INSTANCE
+		? "Whipsocket Video"
+		: "Cap — Beautiful screen recordings, owned by you.",
 	description:
 		"Cap is the open source alternative to Loom. Lightweight, powerful, and cross-platform. Record and share in seconds.",
 	openGraph: {
@@ -82,23 +88,23 @@ export default function RootLayout({ children }: PropsWithChildren) {
 				<link
 					rel="apple-touch-icon"
 					sizes="180x180"
-					href="/apple-touch-icon.png"
+					href={`${ICONS}/apple-touch-icon.png`}
 				/>
 				<link
 					rel="icon"
 					type="image/png"
 					sizes="32x32"
-					href="/favicon-32x32.png"
+					href={`${ICONS}/favicon-32x32.png`}
 				/>
 				<link
 					rel="icon"
 					type="image/png"
 					sizes="16x16"
-					href="/favicon-16x16.png"
+					href={`${ICONS}/favicon-16x16.png`}
 				/>
 				<link rel="manifest" href="/site.webmanifest" />
 				<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-				<link rel="shortcut icon" href="/favicon.ico" />
+				<link rel="shortcut icon" href={`${ICONS}/favicon.ico`} />
 				<meta name="msapplication-TileColor" content="#da532c" />
 				<meta name="theme-color" content="#ffffff" />
 			</head>

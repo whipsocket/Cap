@@ -32,6 +32,7 @@ import type { OrganizationSettings } from "../../dashboard-data";
 import { MemberSelect } from "../../spaces/[spaceId]/components/MemberSelect";
 import { PublicCollectionField } from "../PublicCollectionField";
 import { createSpace } from "./server";
+import { showProLabels } from "@/lib/pro-labels";
 
 interface SpaceDialogProps {
 	open: boolean;
@@ -545,7 +546,7 @@ export const NewSpaceForm: React.FC<NewSpaceFormProps> = (props) => {
 										<div>
 											<div className="flex gap-1.5 items-center">
 												<p className="text-sm text-gray-12">{option.label}</p>
-												{option.pro && (
+												{option.pro && showProLabels() && (
 													<span className="rounded-full bg-blue-11 px-1.5 py-0.5 text-[10px] font-medium leading-none text-white">
 														Pro
 													</span>

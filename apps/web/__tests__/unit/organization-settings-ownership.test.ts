@@ -145,6 +145,8 @@ const openRemove = () =>
 
 beforeEach(() => {
 	vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
+	// Whipsocket fork: custom domains only show on Cap's cloud.
+	vi.stubEnv("NEXT_PUBLIC_IS_CAP", "true");
 	mocks.id = "org-a";
 	mocks.name = "Alpha";
 	mocks.domain = "alpha.example";
@@ -164,6 +166,7 @@ afterEach(() => {
 	queryClient.clear();
 	host.remove();
 	vi.unstubAllGlobals();
+	vi.unstubAllEnvs();
 });
 
 describe("organization settings ownership", () => {
