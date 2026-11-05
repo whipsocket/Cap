@@ -1,6 +1,7 @@
 import { db } from "@cap/database";
 import { getCurrentUser } from "@cap/database/auth/session";
 import { organizationInvites } from "@cap/database/schema";
+import { serverEnv } from "@cap/env";
 import { userIsPro } from "@cap/utils";
 import { and, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
@@ -122,6 +123,7 @@ export default async function DashboardLayout({
 					userPreferences={userPreferences}
 					referClicked={referClicked === "true"}
 					shareableLinkUsage={shareableLinkUsage}
+					staffOrganizationId={serverEnv().PORTAL_STAFF_ORG_ID?.trim() || null}
 				>
 					<DashboardPasteImport />
 					<div className="bg-gray-2 dashboard-grid">

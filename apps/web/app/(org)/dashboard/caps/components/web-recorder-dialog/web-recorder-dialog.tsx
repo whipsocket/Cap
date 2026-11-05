@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MonitorIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { hasUnlimitedRecording } from "@/lib/recording-limit";
 import { useDashboardContext } from "../../../Contexts";
 import {
 	CameraPreviewWindow,
@@ -108,8 +109,14 @@ export const WebRecorderDialog = () => {
 		playAudio(stopSoundRef.current);
 	}, [playAudio]);
 
-	const { activeOrganization, user } = useDashboardContext();
+	const { activeOrganization, user, staffOrganizationId } =
+		useDashboardContext();
 	const organisationId = activeOrganization?.organization.id;
+	const unlimitedRecording = hasUnlimitedRecording(
+		organisationId,
+		staffOrganizationId,
+		user.isPro,
+	);
 	const { devices: availableMics, refresh: refreshMics } =
 		useMicrophoneDevices(open);
 	const { devices: availableCameras, refresh: refreshCameras } =
@@ -181,7 +188,7 @@ export const WebRecorderDialog = () => {
 		systemAudioEnabled,
 		recordingMode,
 		selectedCameraId,
-		isProUser: user.isPro,
+		isProUser: unlimitedRecording,
 		onRecordingSurfaceDetected: (mode) => {
 			setRecordingMode(mode);
 		},
@@ -269,7 +276,7 @@ export const WebRecorderDialog = () => {
 	const showCameraPreview =
 		selectedCameraId &&
 		(recordingMode !== "camera" || (!isSettingUp && !isBusy));
-	const recordingTimerDisplayMs = user.isPro
+	const recordingTimerDisplayMs = unlimitedRecording
 		? durationMs
 		: Math.max(0, FREE_PLAN_MAX_RECORDING_MS - durationMs);
 

@@ -40,6 +40,7 @@ import {
 	hasCompleteRecordingParts,
 	matchesCompletedRecordingParts,
 } from "@/lib/recording-multipart-integrity";
+import { hasUnlimitedRecording } from "@/lib/recording-limit";
 import { runPromise } from "@/lib/server";
 import { startVideoProcessingWorkflow } from "@/lib/video-processing";
 import { stringOrNumberOptional } from "@/utils/zod";
@@ -519,7 +520,14 @@ app.post(
 						.limit(1),
 				);
 
-				if (!userIsPro(orgOwner)) {
+				// Whipsocket fork: staff organization unlimited, clients limited.
+				if (
+					!hasUnlimitedRecording(
+						video.orgId,
+						serverEnv().PORTAL_STAFF_ORG_ID,
+						userIsPro(orgOwner),
+					)
+				) {
 					// The uploaded parts must not linger as incomplete-MPU storage
 					// (S3 bills them until the upload is aborted), and the stale
 					// videoUploads row would otherwise keep the video in a phantom
@@ -573,8 +581,8 @@ app.post(
 					c.status(403);
 					return c.text(
 						reportedDuration === null
-							? "Recording duration is required to complete a free plan upload."
-							: "Recording exceeds the free plan duration limit. Upgrade to Cap Pro to upload longer recordings.",
+							? "Recording duration is required to complete this upload."
+							: "Recording is longer than the 5-minute limit.",
 					);
 				}
 			}
