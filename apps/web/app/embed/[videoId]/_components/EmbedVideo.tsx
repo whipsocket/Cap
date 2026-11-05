@@ -28,6 +28,8 @@ import {
 	parseVTT,
 	type TranscriptEntry,
 } from "@/app/s/[videoId]/_components/utils/transcript-utils";
+import { PlayerBrandingProvider } from "@/components/PlayerBranding";
+import type { PlayerBranding } from "@/lib/player-branding";
 import { formatPlayerTime } from "@/lib/player-time";
 import type { SharePageBranding } from "@/lib/share-branding";
 import type { ShareCallToAction } from "@/lib/share-call-to-action";
@@ -78,6 +80,8 @@ export const EmbedVideo = forwardRef<
 		viewerSettings?: ViewerSettings | null;
 		showPlaybackStatusBadge?: boolean;
 		callToAction?: ShareCallToAction | null;
+		/** Whipsocket fork: the owner organization's player branding. */
+		playerBranding?: PlayerBranding | null;
 	}
 >(
 	(
@@ -96,6 +100,7 @@ export const EmbedVideo = forwardRef<
 			viewerSettings,
 			showPlaybackStatusBadge = false,
 			callToAction = null,
+			playerBranding = null,
 		},
 		ref,
 	) => {
@@ -273,7 +278,7 @@ export const EmbedVideo = forwardRef<
 		}, [handleLoadedMetadata]);
 
 		return (
-			<>
+			<PlayerBrandingProvider value={playerBranding}>
 				<div
 					ref={playerContainerRef}
 					className="relative w-screen h-screen rounded-xl"
@@ -426,7 +431,7 @@ export const EmbedVideo = forwardRef<
 						onChange={setSegmentUploadProgress}
 					/>
 				)}
-			</>
+			</PlayerBrandingProvider>
 		);
 	},
 );

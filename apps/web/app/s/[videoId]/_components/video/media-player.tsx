@@ -60,6 +60,7 @@ import {
 	PLAYBACK_SPEEDS,
 } from "@/lib/playback-speed";
 import { seekLength } from "../early-length";
+import { useAccentBackground } from "@/components/PlayerBranding";
 import { Badge } from "./badge";
 import { Button as PlayerButton } from "./button";
 import {
@@ -1633,6 +1634,7 @@ function MediaPlayerSeek(props: MediaPlayerSeekProps) {
 
 	const context = useMediaPlayerContext(SEEK_NAME);
 	const store = useStoreContext(SEEK_NAME);
+	const accentBackground = useAccentBackground();
 	const dispatch = useMediaDispatch();
 	const mediaCurrentTime = useMediaSelector(selectCurrentTime);
 	const mediaDuration = useMediaSelector(selectDuration);
@@ -2319,7 +2321,10 @@ function MediaPlayerSeek(props: MediaPlayerSeekProps) {
 								}}
 							/>
 						)}
-					<SliderPrimitive.Range className="absolute h-full bg-white will-change-[width]" />
+					<SliderPrimitive.Range
+						className="absolute h-full bg-white will-change-[width]"
+						style={accentBackground}
+					/>
 					{seekState.isHovering && effectiveDuration > 0 && (
 						<div
 							data-slot="media-player-seek-hover-range"

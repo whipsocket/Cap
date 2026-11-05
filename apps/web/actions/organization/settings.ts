@@ -13,6 +13,10 @@ import {
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { normalizePlaybackSpeed } from "@/lib/playback-speed";
+import {
+	PLAYER_BRANDING_KEYS,
+	pickPlayerBrandingSettings,
+} from "@/lib/player-branding";
 import { requireOrganizationSettingsManager } from "./authorization";
 
 type OrganizationSettingsInput = {
@@ -108,9 +112,22 @@ export async function updateOrganizationSettings(
 		? sanitizedSettings
 		: preserveProSettings(sanitizedSettings, organization.settings);
 
+	// Whipsocket fork: player branding has its own save (player-branding.ts);
+	// keep the stored values instead of whatever this form last loaded.
+	const withoutBranding = Object.fromEntries(
+		Object.entries(nextSettings).filter(
+			([key]) => !(PLAYER_BRANDING_KEYS as readonly string[]).includes(key),
+		),
+	) as OrganizationSettingsInput;
+
 	await db()
 		.update(organizations)
-		.set({ settings: nextSettings })
+		.set({
+			settings: {
+				...withoutBranding,
+				...pickPlayerBrandingSettings(organization.settings),
+			},
+		})
 		.where(eq(organizations.id, organizationId));
 
 	revalidatePath("/dashboard/caps");

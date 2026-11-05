@@ -241,6 +241,10 @@ export const organizations = mysqlTable(
 			shareableLinkUseOrganizationIcon?: boolean;
 			aiGenerationLanguage?: AiGenerationLanguage;
 			defaultPlaybackSpeed?: number;
+			/** Whipsocket fork: player play button / progress bar color (#rrggbb). */
+			playerAccentColor?: string;
+			/** Whipsocket fork: show the organization icon while a video loads. */
+			playerUseOrganizationIconForLoading?: boolean;
 		}>(),
 		iconUrl: varchar("iconUrl", {
 			length: 1024,

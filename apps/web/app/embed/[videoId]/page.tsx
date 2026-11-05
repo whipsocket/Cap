@@ -35,6 +35,7 @@ import {
 import { resolveDefaultPlaybackSpeed } from "@/lib/playback-speed";
 import * as EffectRuntime from "@/lib/server";
 import { getSharePageBranding } from "@/lib/share-branding";
+import { getPlayerBranding } from "@/lib/player-branding";
 import { parseShareCallToAction } from "@/lib/share-call-to-action";
 import { buildShareVideoMetadata } from "@/lib/share-video-metadata";
 import { isVideoOverShareableLinkLimit } from "@/lib/shareable-link-quota";
@@ -358,7 +359,7 @@ async function EmbedContent({
 		);
 	}
 
-	const [commentsQuery, ownerImageUrl, branding] = await Promise.all([
+	const [commentsQuery, ownerImageUrl, branding, playerBranding] = await Promise.all([
 		db()
 			.select({
 				id: comments.id,
@@ -409,10 +410,21 @@ async function EmbedContent({
 				shareableLinkIconUrl: imageUrl,
 			});
 		}).pipe(EffectRuntime.runPromise),
+		// Whipsocket fork: the owner organization's player branding.
+		Effect.gen(function* () {
+			const icon = video.orgSettings?.playerUseOrganizationIconForLoading
+				? video.organizationIconUrl
+				: null;
+			if (!icon) return getPlayerBranding(video.orgSettings, null);
+			const imageUploads = yield* ImageUploads;
+			const imageUrl = yield* imageUploads.resolveImageUrl(icon);
+			return getPlayerBranding(video.orgSettings, imageUrl);
+		}).pipe(EffectRuntime.runPromise),
 	]);
 
 	return (
 		<EmbedVideo
+			playerBranding={playerBranding}
 			data={video}
 			branding={branding}
 			user={user}

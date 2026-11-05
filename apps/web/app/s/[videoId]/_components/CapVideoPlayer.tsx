@@ -1,6 +1,9 @@
 "use client";
 
-import { LogoSpinner } from "@cap/ui";
+import {
+	PlayerLoadingIcon,
+	useAccentBackground,
+} from "@/components/PlayerBranding";
 import { calculateStrokeDashoffset, getProgressCircleConfig } from "@cap/utils";
 import type { Video } from "@cap/web-domain";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
@@ -188,6 +191,7 @@ export function CapVideoPlayer({
 	onUploadComplete,
 	callToAction = null,
 }: Props) {
+	const accentBackground = useAccentBackground();
 	const [currentCue, setCurrentCue] = useState<string>("");
 	const [controlsVisible, setControlsVisible] = useState(false);
 	const [mainControlsVisible, setMainControlsVisible] = useState(false);
@@ -857,7 +861,7 @@ export function CapVideoPlayer({
 				)}
 			>
 				<div className="flex flex-col gap-2 items-center">
-					<LogoSpinner className="w-8 h-auto animate-spin sm:w-10" />
+					<PlayerLoadingIcon className="w-8 h-auto animate-spin sm:w-10" />
 				</div>
 			</div>
 			{showRawPlaybackBadge && (
@@ -1015,6 +1019,7 @@ export function CapVideoPlayer({
 							transition={{ duration: 0.2 }}
 							onClick={() => videoRef.current?.play()}
 							className="flex absolute inset-0 z-10 justify-center items-center m-auto bg-blue-500 rounded-full transition-colors transform cursor-pointer hover:bg-blue-600 size-12 xs:size-20 md:size-32"
+							style={accentBackground}
 						>
 							<FontAwesomeIcon
 								icon={faPlay}

@@ -40,6 +40,8 @@ import { formatTimeAgo } from "./_components/tabs/Activity/utils";
 import { TimelineSkeleton } from "./_components/timeline/TimelineSkeleton";
 import type { FilmstripSource } from "./_components/timeline/useFilmstripFrames";
 import type { VideoData } from "./types";
+import { PlayerBrandingProvider } from "@/components/PlayerBranding";
+import type { PlayerBranding } from "@/lib/player-branding";
 
 const importTimelineView = () => import("./_components/timeline/TimelineView");
 const TimelineView = dynamic(importTimelineView, { ssr: false });
@@ -220,6 +222,8 @@ interface ShareProps {
 	 */
 	header?: React.ReactNode;
 	dashboardDestination?: ShareDashboardDestination | null;
+	/** Whipsocket fork: the owner organization's player branding. */
+	playerBranding?: PlayerBranding | null;
 }
 
 const useVideoStatus = (
@@ -341,6 +345,7 @@ export const Share = ({
 	viewerSignedIn = false,
 	header,
 	dashboardDestination = null,
+	playerBranding = null,
 }: ShareProps) => {
 	const isScreenshot = data.isScreenshot === true;
 	// Memoized: a fresh Date each render would defeat the memoized `data`
@@ -742,6 +747,7 @@ export const Share = ({
 	}, []);
 
 	return (
+		<PlayerBrandingProvider value={playerBranding}>
 		<CaptionProvider
 			videoId={data.id}
 			transcriptionStatus={transcriptionStatus}
@@ -1206,6 +1212,7 @@ export const Share = ({
 				</div>
 			</PlaybackProvider>
 		</CaptionProvider>
+		</PlayerBrandingProvider>
 	);
 };
 

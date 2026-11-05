@@ -61,6 +61,7 @@ import { getPublicShareVideo } from "@/lib/public-share-video";
 import * as EffectRuntime from "@/lib/server";
 import { runPromise } from "@/lib/server";
 import { getSharePageBranding } from "@/lib/share-branding";
+import { getPlayerBranding } from "@/lib/player-branding";
 import { parseShareCallToAction } from "@/lib/share-call-to-action";
 import { getShareDashboardDestination } from "@/lib/share-dashboard-destination";
 import {
@@ -1015,6 +1016,10 @@ async function AuthorizedContent({
 	return (
 		<div className="flex flex-col flex-1 min-h-0">
 			<Share
+				playerBranding={getPlayerBranding(
+					videoWithOrganizationInfo.orgSettings,
+					videoWithOrganizationInfo.organizationIconUrl,
+				)}
 				header={
 					<ShareHeader
 						canMoveToFolder={
