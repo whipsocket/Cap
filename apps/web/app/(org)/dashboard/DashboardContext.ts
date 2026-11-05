@@ -41,8 +41,8 @@ export type SharedContext = {
 	developerApps: DeveloperApp[] | null;
 	setDeveloperApps: (apps: DeveloperApp[] | null) => void;
 	shareableLinkUsage: { used: number; limit: number } | null;
-	/** Whipsocket fork: the portal staff organization (no recording limit), if set. */
-	staffOrganizationId?: string | null;
+	/** Whipsocket fork: organizations with no recording limit (null: Cap's own rule). */
+	unlimitedRecordingOrganizationIds?: string[] | null;
 };
 
 export type ITheme = "light" | "dark";

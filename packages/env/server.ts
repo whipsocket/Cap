@@ -122,6 +122,12 @@ function createServerEnv() {
 				.describe(
 					"Organization that portal staff join on sign-in (the agency's organization).",
 				),
+			CAP_UNLIMITED_RECORDING_ORG_IDS: z
+				.string()
+				.optional()
+				.describe(
+					"Comma-separated organization ids that, like the staff organization, have no recording length limit. Set by the server admin only.",
+				),
 
 			/// Settings
 			CAP_VIDEOS_DEFAULT_PUBLIC: boolString(true).describe(

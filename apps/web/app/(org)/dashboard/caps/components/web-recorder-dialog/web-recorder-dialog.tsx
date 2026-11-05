@@ -109,12 +109,12 @@ export const WebRecorderDialog = () => {
 		playAudio(stopSoundRef.current);
 	}, [playAudio]);
 
-	const { activeOrganization, user, staffOrganizationId } =
+	const { activeOrganization, user, unlimitedRecordingOrganizationIds } =
 		useDashboardContext();
 	const organisationId = activeOrganization?.organization.id;
 	const unlimitedRecording = hasUnlimitedRecording(
 		organisationId,
-		staffOrganizationId,
+		unlimitedRecordingOrganizationIds,
 		user.isPro,
 	);
 	const { devices: availableMics, refresh: refreshMics } =

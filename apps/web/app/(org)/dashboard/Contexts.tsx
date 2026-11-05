@@ -35,7 +35,7 @@ export function DashboardContexts({
 	initialSidebarCollapsed,
 	referClicked,
 	shareableLinkUsage,
-	staffOrganizationId = null,
+	unlimitedRecordingOrganizationIds = null,
 }: {
 	children: React.ReactNode;
 	organizationData: SharedContext["organizationData"];
@@ -49,7 +49,7 @@ export function DashboardContexts({
 	initialSidebarCollapsed: boolean;
 	referClicked: boolean;
 	shareableLinkUsage: SharedContext["shareableLinkUsage"];
-	staffOrganizationId?: string | null;
+	unlimitedRecordingOrganizationIds?: string[] | null;
 }) {
 	const user = useCurrentUser();
 	if (!user) redirect("/login");
@@ -169,7 +169,7 @@ export function DashboardContexts({
 					developerApps,
 					setDeveloperApps,
 					shareableLinkUsage,
-					staffOrganizationId,
+					unlimitedRecordingOrganizationIds,
 				}}
 			>
 				{children}

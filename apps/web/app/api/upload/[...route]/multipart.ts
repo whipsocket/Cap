@@ -40,7 +40,10 @@ import {
 	hasCompleteRecordingParts,
 	matchesCompletedRecordingParts,
 } from "@/lib/recording-multipart-integrity";
-import { hasUnlimitedRecording } from "@/lib/recording-limit";
+import {
+	hasUnlimitedRecording,
+	unlimitedRecordingOrganizationIds,
+} from "@/lib/recording-limit";
 import { runPromise } from "@/lib/server";
 import { startVideoProcessingWorkflow } from "@/lib/video-processing";
 import { stringOrNumberOptional } from "@/utils/zod";
@@ -524,7 +527,7 @@ app.post(
 				if (
 					!hasUnlimitedRecording(
 						video.orgId,
-						serverEnv().PORTAL_STAFF_ORG_ID,
+						unlimitedRecordingOrganizationIds(serverEnv()),
 						userIsPro(orgOwner),
 					)
 				) {

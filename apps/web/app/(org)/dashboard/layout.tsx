@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AuthContextProvider } from "@/app/Layout/AuthContext";
 import { resolveCurrentUser } from "@/app/Layout/current-user";
+import { unlimitedRecordingOrganizationIds } from "@/lib/recording-limit";
 import { runPromise } from "@/lib/server";
 import { getShareableLinkUsage } from "@/lib/shareable-link-quota";
 import DashboardInner from "./_components/DashboardInner";
@@ -123,7 +124,9 @@ export default async function DashboardLayout({
 					userPreferences={userPreferences}
 					referClicked={referClicked === "true"}
 					shareableLinkUsage={shareableLinkUsage}
-					staffOrganizationId={serverEnv().PORTAL_STAFF_ORG_ID?.trim() || null}
+					unlimitedRecordingOrganizationIds={unlimitedRecordingOrganizationIds(
+						serverEnv(),
+					)}
 				>
 					<DashboardPasteImport />
 					<div className="bg-gray-2 dashboard-grid">
