@@ -11,7 +11,11 @@ import { CHROME_EXTENSION_BUTTON_CLASS } from "@/lib/chrome-extension";
 import { FREE_PLAN_MAX_RECORDING_MS } from "../components/web-recorder-dialog/web-recorder-constants";
 import { WebRecorderDialog } from "../components/web-recorder-dialog/web-recorder-dialog";
 
-export const RecordVideoPage = () => {
+export const RecordVideoPage = ({
+	portalMode = false,
+}: {
+	portalMode?: boolean;
+}) => {
 	const checkingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const openDesktop = useCallback(() => {
@@ -38,6 +42,19 @@ export const RecordVideoPage = () => {
 			}
 		}, 1500);
 	}, []);
+
+	// Whipsocket fork: from the portal, just the browser recorder (already open).
+	if (portalMode) {
+		return (
+			<div className="flex flex-col flex-1 gap-4 justify-center items-center px-5 w-full h-full text-center">
+				<p className="max-w-md text-gray-10 text-md">
+					Record your screen. When you stop, the video is added to your ticket
+					and this window closes.
+				</p>
+				<WebRecorderDialog portalMode />
+			</div>
+		);
+	}
 
 	return (
 		<div

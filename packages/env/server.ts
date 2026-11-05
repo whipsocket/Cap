@@ -122,6 +122,12 @@ function createServerEnv() {
 				.describe(
 					"Organization that portal staff join on sign-in (the agency's organization).",
 				),
+			PORTAL_URL: z
+				.string()
+				.optional()
+				.describe(
+					"The portal's address (e.g. https://portal.whipsocket.com). Finished recordings started from the portal are handed back to this origin only.",
+				),
 			CAP_UNLIMITED_RECORDING_ORG_IDS: z
 				.string()
 				.optional()

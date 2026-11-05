@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MonitorIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { notifyPortalRecording } from "@/lib/portal-bridge";
 import { hasUnlimitedRecording } from "@/lib/recording-limit";
 import { useDashboardContext } from "../../../Contexts";
 import {
@@ -57,8 +58,13 @@ const waitForNextFrame = () =>
 		window.requestAnimationFrame(() => resolve());
 	});
 
-export const WebRecorderDialog = () => {
-	const [open, setOpen] = useState(false);
+export const WebRecorderDialog = ({
+	portalMode = false,
+}: {
+	/** Whipsocket fork: opened from the portal; open now, hand the video back. */
+	portalMode?: boolean;
+} = {}) => {
+	const [open, setOpen] = useState(portalMode);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 	const [recordingMode, setRecordingMode] =
@@ -152,6 +158,7 @@ export const WebRecorderDialog = () => {
 
 	const {
 		phase,
+		videoId,
 		durationMs,
 		hasAudioTrack,
 		chunkUploads,
@@ -195,6 +202,19 @@ export const WebRecorderDialog = () => {
 		onRecordingStart: handleRecordingStartSound,
 		onRecordingStop: handleRecordingStopSound,
 	});
+
+	// Whipsocket fork: hand the finished recording back to the portal, once.
+	const handedToPortal = useRef<string | null>(null);
+	useEffect(() => {
+		if (!portalMode || phase !== "completed") return;
+		if (!videoId || !completedShareUrl) return;
+		if (handedToPortal.current === videoId) return;
+		handedToPortal.current = videoId;
+		if (notifyPortalRecording({ videoId, shareUrl: completedShareUrl })) {
+			toast.success("Added to your ticket. This window will close.");
+			window.setTimeout(() => window.close(), 2000);
+		}
+	}, [portalMode, phase, videoId, completedShareUrl]);
 
 	useEffect(() => {
 		if (
